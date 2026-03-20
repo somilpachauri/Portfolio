@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  background-color: #000;
+  color: white;
+  margin: 0;
+  overflow-x: hidden;
+}
+@theme {
+  /* The --color- prefix tells Tailwind to generate text-gold, bg-gold, etc. */
+  --color-oxford: #14213d;
+  --color-gold: #fca311;
+  --color-platinum: #e5e5e5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .animate-scroll {
+    animation: scroll 35s linear infinite;
+  }
+  .animate-scroll-reverse {
+    animation: scroll 35s linear infinite reverse;
+  }
+  .mask-fade {
+    /* Fades out the left and right edges of the scrolling container */
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+  /* Pauses the animation when the user hovers over it */
+  .pause-on-hover:hover .animate-scroll,
+  .pause-on-hover:hover .animate-scroll-reverse {
+    animation-play-state: paused;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+/* Prevent white background and black text on browser autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  /* This 'fakes' the background by using a giant inner shadow */
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset !important;
+  /* This forces the text to stay white */
+  -webkit-text-fill-color: white !important;
+  /* This prevents the transition animation from showing the white briefly */
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: white;
 }
