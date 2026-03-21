@@ -14,7 +14,6 @@ export default function Home() {
   return (
     <main className="relative w-full bg-black overflow-hidden scroll-smooth">
       
-      {/* 1. 3D LAYER (Furthest back) */}
       <div className="fixed inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
           <ambientLight intensity={0.5} />
@@ -24,10 +23,8 @@ export default function Home() {
         </Canvas>
       </div>
 
-      {/* 2. GLOBAL OVERLAY TINT - Applies the transparent blue to the entire page */}
       <div className="fixed inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/60 via-oxford/40 to-transparent"></div>
 
-      {/* 3. HTML UI LAYER (Front - Scrolls over everything) */}
       <div className="relative z-20 w-full pointer-events-none">
         <Navbar />
         <Hero />

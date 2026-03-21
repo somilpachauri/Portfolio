@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CustomCursor from "./components/ui/CustomCursor";
 
 export const metadata: Metadata = {
   title: "Somil Pachauri | Portfolio",
@@ -12,7 +13,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // THE FIX: Add suppressHydrationWarning here and on the body!
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         {children}

@@ -1,6 +1,4 @@
 export default function Skills() {
-  // THE TS FIX: We define exactly what a Skill object looks like. 
-  // The "?" makes 'invert' optional, so TS won't complain if it's missing!
   type Skill = {
     name: string;
     icon: string;
@@ -31,49 +29,48 @@ export default function Skills() {
   return (
     <section id="skills" className="min-h-screen flex flex-col justify-center py-20 overflow-hidden">
       
-      <div className="text-center mb-16 px-10">
-        <h2 className="text-white text-4xl md:text-5xl font-bold tracking-wider drop-shadow-lg">
+      <div className="text-center mb-10 md:mb-16 px-6 md:px-10">
+        <h2 className="text-white text-3xl md:text-5xl font-bold tracking-wider drop-shadow-lg">
           My <span className="text-gold">Arsenal.</span>
         </h2>
-        <p className="text-platinum mt-4 text-lg max-w-xl mx-auto drop-shadow-md">
+        <p className="text-platinum mt-4 text-sm md:text-lg max-w-xl mx-auto drop-shadow-md">
           The technologies I use to build digital experiences and hunt for vulnerabilities.
         </p>
       </div>
 
-      {/* Top Carousel Row */}
-      <div className="relative w-full flex overflow-hidden pause-on-hover group mb-6 mask-fade">
-        <div className="flex w-max animate-scroll gap-6 px-3">
+     
+      <div className="relative w-full flex overflow-hidden pause-on-hover group mb-4 md:mb-6 mask-fade">
+       
+        <div className="flex w-max animate-scroll gap-3 md:gap-6 px-3">
           {duplicatedTopRow.map((skill, index) => (
             <div 
               key={`${skill.name}-${index}`} 
-              className="flex flex-col items-center justify-center w-40 h-40 bg-white/[0.02] border border-white/20 rounded-2xl backdrop-blur-md hover:border-gold hover:bg-white/10 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
+              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl backdrop-blur-md hover:border-gold hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
             >
               <img 
                 src={skill.icon} 
                 alt={skill.name} 
-                // THE LOGO FIX: Removed brightness-0 so the inside details of the logos are preserved!
-                className={`w-16 h-16 mb-4 drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
+                className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
               />
-              <span className="text-white font-bold tracking-wider drop-shadow-md">{skill.name}</span>
+              <span className="text-white text-[11px] md:text-base font-bold tracking-wider drop-shadow-md">{skill.name}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Bottom Carousel Row (Reverse) */}
       <div className="relative w-full flex overflow-hidden pause-on-hover group mask-fade">
-        <div className="flex w-max animate-scroll-reverse gap-6 px-3">
+        <div className="flex w-max animate-scroll-reverse gap-3 md:gap-6 px-3">
           {duplicatedBottomRow.map((skill, index) => (
             <div 
               key={`${skill.name}-${index}`} 
-              className="flex flex-col items-center justify-center w-40 h-40 bg-white/[0.02] border border-white/20 rounded-2xl backdrop-blur-md hover:border-gold hover:bg-white/10 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
+              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl backdrop-blur-md hover:border-gold hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
             >
               <img 
                 src={skill.icon} 
                 alt={skill.name} 
-                className={`w-16 h-16 mb-4 drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
+                className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
               />
-              <span className="text-white font-bold tracking-wider drop-shadow-md">{skill.name}</span>
+              <span className="text-white text-[11px] md:text-base font-bold tracking-wider drop-shadow-md">{skill.name}</span>
             </div>
           ))}
         </div>

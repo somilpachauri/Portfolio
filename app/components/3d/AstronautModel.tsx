@@ -21,13 +21,10 @@ export default function AstronautModel() {
   });
 
   return (
-    // This parent group tracks the mouse. Its center is at [4, 2, 1].
     <group ref={astronautRef} position={[4, 2, 1]}>
       
       <Float speed={2} rotationIntensity={0.5} floatIntensity={2}>
         
-        {/* THE PIVOT FIX: Wrap the primitive in a new group and push the model DOWN */}
-        {/* By moving the model down (-2 on the Y-axis), the telescope moves up into the true center of rotation */}
         <group position={[0, -2, 0]}> 
           
           <primitive 

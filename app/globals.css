@@ -7,7 +7,6 @@ body {
   overflow-x: hidden;
 }
 @theme {
-  /* The --color- prefix tells Tailwind to generate text-gold, bg-gold, etc. */
   --color-oxford: #14213d;
   --color-gold: #fca311;
   --color-platinum: #e5e5e5;
@@ -21,11 +20,9 @@ body {
     animation: scroll 35s linear infinite reverse;
   }
   .mask-fade {
-    /* Fades out the left and right edges of the scrolling container */
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   }
-  /* Pauses the animation when the user hovers over it */
   .pause-on-hover:hover .animate-scroll,
   .pause-on-hover:hover .animate-scroll-reverse {
     animation-play-state: paused;
@@ -36,18 +33,37 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-/* Prevent white background and black text on browser autofill */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus {
-  /* This 'fakes' the background by using a giant inner shadow */
   -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset !important;
-  /* This forces the text to stay white */
   -webkit-text-fill-color: white !important;
-  /* This prevents the transition animation from showing the white briefly */
   transition: background-color 5000s ease-in-out 0s;
   caret-color: white;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(252, 163, 17, 0.5);
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(252, 163, 17, 1); 
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(252, 163, 17, 0.8) #050505;
+}
+
