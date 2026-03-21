@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("about");
-  // ADDED: State to track if the mobile menu is open or closed
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,6 @@ export default function Navbar() {
           SOMIL<span className="text-gold">.</span>
         </Link>
 
-        {/* DESKTOP MENU */}
         <ul className="hidden md:flex gap-8 text-sm uppercase tracking-widest">
           {navLinks.map((link) => (
             <li key={link.name}>
@@ -67,7 +65,6 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* MOBILE MENU BUTTON */}
         <button 
           className="md:hidden text-white p-2 focus:outline-none"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -80,9 +77,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* MOBILE DROPDOWN MENU */}
       <div 
-        // PURE TAILWIND GLASS: bg-black/60 for the dark tint, backdrop-blur-2xl for the heavy frost.
         className={`md:hidden absolute top-full left-4 right-4 mt-2 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl flex flex-col items-center py-8 gap-8 transition-all duration-300 origin-top ${
           isMobileMenuOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 pointer-events-none"
         }`}
