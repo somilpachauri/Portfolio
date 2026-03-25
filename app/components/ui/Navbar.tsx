@@ -40,7 +40,6 @@ export default function Navbar() {
   return (
  <nav className="fixed top-0 left-0 w-full z-[999] bg-black/40 backdrop-blur-xl border-b border-white/10 pointer-events-auto transition-all">
       
-      {/* Main Navbar Bar */}
       <div className="px-6 md:px-24 py-5 flex justify-between items-center w-full">
         <Link 
           href="#about" 
