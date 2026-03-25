@@ -58,7 +58,7 @@ export default function Projects() {
         {projects.map((project, index) => (
           <div 
             key={index} 
-            className="flex flex-col bg-oxford/40 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md hover:border-gold/50 transition-all duration-500 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(252,163,17,0.1)]"
+            className="flex flex-col bg-[#0a0a0a]/95 border border-white/10 rounded-2xl overflow-hidden hover:border-gold/50 transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(252,163,17,0.15)]"
           >
             <div className="h-48 md:h-64 overflow-hidden relative">
               <Image 
@@ -68,15 +68,16 @@ export default function Projects() {
                 height={400}
                 className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-oxford/90 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
             </div>
 
             <div className="p-5 md:p-8 flex flex-col flex-grow relative z-10">
-              <h3 className="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-platinum mb-3 md:mb-4 tracking-tight group-hover:from-gold group-hover:to-yellow-200 transition-all duration-500 drop-shadow-sm">
+              
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 tracking-wide group-hover:text-gold transition-colors duration-300 drop-shadow-md">
                 {project.title}
               </h3>
 
-              <p className="text-platinum/60 text-sm md:text-base leading-relaxed md:leading-loose mb-5 md:mb-8 flex-grow font-light group-hover:text-platinum/95 transition-colors duration-500">
+              <p className="text-platinum/70 text-sm md:text-base leading-relaxed md:leading-loose mb-5 md:mb-8 flex-grow font-light group-hover:text-platinum/95 transition-colors duration-500">
                 {project.description}
               </p>
 
@@ -84,7 +85,7 @@ export default function Projects() {
                 {project.tech.map((tag, i) => (
                   <span 
                     key={i} 
-                    className="px-2 py-1 md:px-3 md:py-1 bg-black/40 border border-white/10 rounded-full text-[10px] md:text-xs text-gold tracking-wider group-hover:border-gold/30 transition-colors duration-300"
+                    className="px-2 py-1 md:px-3 md:py-1 bg-white/5 border border-white/10 rounded-full text-[10px] md:text-xs text-gold tracking-wider group-hover:border-gold/30 transition-colors duration-300"
                   >
                     {tag}
                   </span>
