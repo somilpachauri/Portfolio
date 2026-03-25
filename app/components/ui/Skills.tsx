@@ -30,45 +30,50 @@ export default function Skills() {
     <section id="skills" className="min-h-screen flex flex-col justify-center py-20 overflow-hidden">
       
       <div className="text-center mb-10 md:mb-16 px-6 md:px-10">
-        <h2 className="text-white text-3xl md:text-5xl font-bold tracking-wider drop-shadow-lg">
+        <h2 className="text-white text-3xl md:text-5xl font-bold tracking-wider md:drop-shadow-lg">
           My <span className="text-gold">Arsenal.</span>
         </h2>
-        <p className="text-platinum mt-4 text-sm md:text-lg max-w-xl mx-auto drop-shadow-md">
+        <p className="text-platinum mt-4 text-sm md:text-lg max-w-xl mx-auto md:drop-shadow-md">
           The technologies I use to build digital experiences and hunt for vulnerabilities.
         </p>
       </div>
 
-      <div className="relative w-full flex overflow-hidden pause-on-hover group mb-4 md:mb-6 mask-fade">
-        <div className="flex w-max animate-scroll gap-3 md:gap-6 px-3">
+      {/* FIX 1: Removed mask-fade from the parent container to stop it from killing mobile performance */}
+      <div className="relative w-full flex overflow-hidden pause-on-hover group mb-4 md:mb-6">
+        
+        {/* FIX 2: Added 'will-change-transform' to force Hardware Acceleration on the animation */}
+        <div className="flex w-max animate-scroll gap-3 md:gap-6 px-3 will-change-transform">
           {duplicatedTopRow.map((skill, index) => (
             <div 
               key={`${skill.name}-${index}`} 
-              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-[#0a0a0a]/95 md:bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl md:backdrop-blur-md hover:border-gold hover:bg-[#1a1a1a] md:hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
+              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-[#0a0a0a]/95 md:bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl md:backdrop-blur-md hover:border-gold hover:bg-[#1a1a1a] md:hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 md:hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
             >
               <img 
                 src={skill.icon} 
                 alt={skill.name} 
-                className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
+                // FIX 3: Changed drop-shadow to md:drop-shadow so phones don't calculate icon shadows
+                className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 md:drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
               />
-              <span className="text-white text-[11px] md:text-base font-bold tracking-wider drop-shadow-md">{skill.name}</span>
+              {/* FIX 4: Changed drop-shadow to md:drop-shadow on the text */}
+              <span className="text-white text-[11px] md:text-base font-bold tracking-wider md:drop-shadow-md">{skill.name}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="relative w-full flex overflow-hidden pause-on-hover group mask-fade">
-        <div className="flex w-max animate-scroll-reverse gap-3 md:gap-6 px-3">
+      <div className="relative w-full flex overflow-hidden pause-on-hover group">
+        <div className="flex w-max animate-scroll-reverse gap-3 md:gap-6 px-3 will-change-transform">
           {duplicatedBottomRow.map((skill, index) => (
             <div 
               key={`${skill.name}-${index}`} 
-              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-[#0a0a0a]/95 md:bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl md:backdrop-blur-md hover:border-gold hover:bg-[#1a1a1a] md:hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
+              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-[#0a0a0a]/95 md:bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl md:backdrop-blur-md hover:border-gold hover:bg-[#1a1a1a] md:hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 md:hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
             >
               <img 
                 src={skill.icon} 
                 alt={skill.name} 
-                className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
+                className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 md:drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
               />
-              <span className="text-white text-[11px] md:text-base font-bold tracking-wider drop-shadow-md">{skill.name}</span>
+              <span className="text-white text-[11px] md:text-base font-bold tracking-wider md:drop-shadow-md">{skill.name}</span>
             </div>
           ))}
         </div>
