@@ -1,11 +1,8 @@
 "use client";
 
-// 1. Added Suspense from react
 import { useState, useEffect, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
-
-// 2. Added dynamic from next/dynamic
+import { Environment, AdaptiveDpr, AdaptiveEvents } from "@react-three/drei";
 import dynamic from "next/dynamic";
 
 import Navbar from "./components/ui/Navbar";
@@ -14,24 +11,19 @@ import Skills from "./components/ui/Skills";
 import Projects from "./components/ui/Projects";
 import Contact from "./components/ui/Contact";
 
-// 3. THE MAGIC TRICK: Dynamically import the heavy 3D component.
-// ssr: false is crucial because 3D models rely on the browser window and will crash if loaded on the server!
-const NebulaBackground = dynamic(() => import("./components/3d/NebulaBackground"), { 
-  ssr: false,
-});
+const NebulaBackground = dynamic<{ isMobile: boolean }>(
+  () => import("./components/3d/NebulaBackground"), 
+  { ssr: false }
+);
 
 export default function Home() {
-  const [dpr, setDpr] = useState<[number, number]>([1, 1.5]);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const updateDpr = () => {
-      setDpr(window.innerWidth > 768 ? [1, 2] : [1, 1.5]);
-    };
-
-    updateDpr(); 
-    window.addEventListener("resize", updateDpr); 
-    
-    return () => window.removeEventListener("resize", updateDpr);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile(); 
+    window.addEventListener("resize", checkMobile); 
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return (
@@ -40,23 +32,26 @@ export default function Home() {
       <div className="fixed inset-0 z-0">
         <Canvas 
           camera={{ position: [0, 0, 10], fov: 60 }}
-          dpr={dpr} 
+          // THE FIX: Hard-cap mobile to 1x resolution. Desktop gets crisp 2x.
+          dpr={isMobile ? 1 : [1, 2]} 
           gl={{ antialias: false, powerPreference: "high-performance" }} 
         >
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
           
-          {/* 4. Wrap the dynamically loaded models in Suspense. 
-              fallback={null} means it will just show empty space until the model is ready. */}
           <Suspense fallback={null}>
-            <Environment preset="forest" /> 
-            <NebulaBackground />
+            <Environment preset="forest" resolution={isMobile ? 256 : 1024} /> 
+            
+            {/* Pass the isMobile state into our 3D model */}
+            <NebulaBackground isMobile={isMobile} />
+
+            <AdaptiveDpr pixelated />
+            <AdaptiveEvents />
           </Suspense>
 
         </Canvas>
       </div>
 
-      {/* The rest of your UI loads INSTANTLY because it's not waiting on the Canvas anymore! */}
       <div className="fixed inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/60 via-oxford/40 to-transparent"></div>
 
       <div className="relative z-20 w-full pointer-events-none">
