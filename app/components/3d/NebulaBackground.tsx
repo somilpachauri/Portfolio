@@ -2,24 +2,24 @@
 
 import { useGLTF, Center } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useEffect } from "react";
+// 1. We import useMemo to help us store our vector
+import { useRef, useEffect, useMemo } from "react";
 import * as THREE from "three";
 
-// Accept the isMobile prop from page.tsx
 export default function NebulaBackground({ isMobile }: { isMobile?: boolean }) {
   const { scene } = useGLTF("/need_some_space.glb");
   const nebulaRef = useRef<THREE.Group>(null);
-  
-  // FIX 1: Create a highly efficient ref to track scrolling
   const scrollY = useRef(0);
 
+  // THE FIX: We create the target vector EXACTLY ONCE when the component loads.
+  // This stops the memory leak and completely prevents the browser from freezing.
+  const targetScaleVec = useMemo(() => new THREE.Vector3(4, 4, 4), []);
+
   useEffect(() => {
-    // This updates the scroll position silently without interrupting the 3D renderer
     const handleScroll = () => {
       scrollY.current = window.scrollY;
     };
     
-    // passive: true makes scrolling buttery smooth by not blocking the main thread
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -28,19 +28,17 @@ export default function NebulaBackground({ isMobile }: { isMobile?: boolean }) {
     if (nebulaRef.current) {
       nebulaRef.current.rotation.y += delta * 0.1;
 
-      // FIX 2: Only scale up the transparent nebula on Desktop!
-      // Scaling transparent objects on mobile causes massive "Alpha Overdraw" lag.
       if (!isMobile) {
-        // Read from our optimized scrollY.current instead of window.scrollY
         const targetScale = 4 + (scrollY.current * 0.005); 
         
-        nebulaRef.current.scale.lerp(
-          new THREE.Vector3(targetScale, targetScale, targetScale), 
-          0.1
-        );
+        // Update our existing vector instead of creating a new one
+        targetScaleVec.set(targetScale, targetScale, targetScale);
+        nebulaRef.current.scale.lerp(targetScaleVec, 0.1);
       } else {
-        // On mobile, lock the scale to 4 so it doesn't crash the GPU as they scroll down
-        nebulaRef.current.scale.set(4, 4, 4);
+        // Stop forcing the phone to re-apply the scale 60 times a second if it's already set
+        if (nebulaRef.current.scale.x !== 4) {
+          nebulaRef.current.scale.set(4, 4, 4);
+        }
       }
     }
   });
