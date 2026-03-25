@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Projects() {
   const projects = [
@@ -60,9 +61,11 @@ export default function Projects() {
             className="flex flex-col bg-oxford/40 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md hover:border-gold/50 transition-all duration-500 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(252,163,17,0.1)]"
           >
             <div className="h-48 md:h-64 overflow-hidden relative">
-              <img 
-                src={project.image} 
+              <Image 
+                src={`/${project.image}`} 
                 alt={project.title} 
+                width={600}
+                height={400}
                 className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-oxford/90 to-transparent"></div>
