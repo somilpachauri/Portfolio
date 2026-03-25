@@ -71,9 +71,9 @@ export default function Projects() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
             </div>
 
-            <div className="p-5 md:p-8 flex flex-col flex-grow relative z-10">
+            <div className="p-5 md:p-8 flex flex-col flex-grew relative z-10">
               
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 tracking-wide group-hover:text-gold transition-colors duration-300 drop-shadow-md">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-600 mb-3 md:mb-4 tracking-wide group-hover:text-gold transition-colors duration-300 drop-shadow-md">
                 {project.title}
               </h3>
 

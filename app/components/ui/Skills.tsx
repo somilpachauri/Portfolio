@@ -38,14 +38,12 @@ export default function Skills() {
         </p>
       </div>
 
-     
       <div className="relative w-full flex overflow-hidden pause-on-hover group mb-4 md:mb-6 mask-fade">
-       
         <div className="flex w-max animate-scroll gap-3 md:gap-6 px-3">
           {duplicatedTopRow.map((skill, index) => (
             <div 
               key={`${skill.name}-${index}`} 
-              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl backdrop-blur-md hover:border-gold hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
+              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-[#0a0a0a]/95 md:bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl md:backdrop-blur-md hover:border-gold hover:bg-[#1a1a1a] md:hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
             >
               <img 
                 src={skill.icon} 
@@ -63,7 +61,7 @@ export default function Skills() {
           {duplicatedBottomRow.map((skill, index) => (
             <div 
               key={`${skill.name}-${index}`} 
-              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl backdrop-blur-md hover:border-gold hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
+              className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-[#0a0a0a]/95 md:bg-white/[0.02] border border-white/20 rounded-xl md:rounded-2xl md:backdrop-blur-md hover:border-gold hover:bg-[#1a1a1a] md:hover:bg-white/10 hover:-translate-y-1 md:hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(252,163,17,0.3)] transition-all duration-300 cursor-pointer"
             >
               <img 
                 src={skill.icon} 
