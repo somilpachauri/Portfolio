@@ -90,7 +90,7 @@ export default function Contact({ onVisibilityChange }: { onVisibilityChange?: (
         {/* THE FIX: Canvas mounts unconditionally so it never fails to show up */}
         <Canvas 
           camera={{ position: [0, 2, 12], fov: 45 }}
-          dpr={isMobile ? 0.8 : [1, 2]} 
+          dpr={isMobile ? 1.5 : [1, 2]} 
           gl={{ antialias: false, powerPreference: "low-power" }} 
         >
           <ambientLight intensity={0.3} />
