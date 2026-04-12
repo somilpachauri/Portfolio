@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, FormEvent } from "react";
+import { useEffect, useRef, useState, FormEvent, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import CampingModel from "../3d/CampingModel";
@@ -10,19 +10,45 @@ export default function Contact() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState("");
 
+  const [mountCanvas, setMountCanvas] = useState(false);
   const [inView, setInView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    // Observer 1: PROXIMITY MOUNTING
+    // Boot up the WebGL Canvas when the user gets within 1000px of the bottom.
+    // It will be fully rendered and ready before they actually see it.
+    const mountObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setMountCanvas(true);
+      },
+      { rootMargin: "1000px" } 
+    );
+
+    // Observer 2: CAMERA ANIMATION
+    // Tell the CampingModel to move the camera when they actually enter the section.
+    const viewObserver = new IntersectionObserver(
       ([entry]) => {
         setInView(entry.isIntersecting);
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 } 
     );
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
+    if (sectionRef.current) {
+      mountObserver.observe(sectionRef.current);
+      viewObserver.observe(sectionRef.current);
+    }
+
+    return () => {
+      mountObserver.disconnect();
+      viewObserver.disconnect();
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -63,30 +89,40 @@ export default function Contact() {
     <section 
       id="contact" 
       ref={sectionRef} 
-      className="relative min-h-screen flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0 pointer-events-auto overflow-hidden"
+      // FIX: Ensure bg-transparent so the section background doesn't hide the z-[-10] Canvas!
+      className="relative min-h-screen flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0 pointer-events-auto overflow-hidden bg-transparent"
     >
       <div 
         className="absolute inset-0 z-[-10] pointer-events-none"
         style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)" }}
       >
-        <Canvas camera={{ position: [0, 2, 12], fov: 45 }}>
-          <ambientLight intensity={0.3} />
-          <directionalLight position={[5, 5, 5]} intensity={1.5} color="#fca311" />
-          <Environment preset="night" />
-          <CampingModel inView={inView} />
-        </Canvas>
+        {mountCanvas && (
+          <Canvas 
+            camera={{ position: [0, 2, 12], fov: 45 }}
+            dpr={isMobile ? 1 : [1, 2]} 
+            gl={{ antialias: false, powerPreference: "low-power" }} 
+          >
+            <ambientLight intensity={0.3} />
+            <directionalLight position={[5, 5, 5]} intensity={1.5} color="#fca311" />
+            
+            {!isMobile && <Environment preset="night" />}
+            
+            <Suspense fallback={null}>
+              <CampingModel inView={inView} />
+            </Suspense>
+          </Canvas>
+        )}
       </div>
 
-
-<div className="relative z-10 w-full max-w-6xl mx-auto flex justify-center md:justify-start">
-  <div className="w-full max-w-md">
-    
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-black/20 md:bg-oxford/40 border border-white/10 p-6 md:p-8 rounded-2xl backdrop-blur-xl shadow-2xl">
-      
-      <h2 className="text-white text-3xl md:text-4xl font-extrabold tracking-tight mb-4 border-b border-white/10 pb-4">
-        Contact <span className="text-gold">Me.</span>
-      </h2>
-      
+      <div className="relative z-10 w-full max-w-6xl mx-auto flex justify-center md:justify-start">
+        <div className="w-full max-w-md">
+          
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-black/20 md:bg-oxford/40 border border-white/10 p-6 md:p-8 rounded-2xl backdrop-blur-xl shadow-2xl">
+            
+            <h2 className="text-white text-3xl md:text-4xl font-extrabold tracking-tight mb-4 border-b border-white/10 pb-4">
+              Contact <span className="text-gold">Me.</span>
+            </h2>
+            
             <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
 
             <div className="flex flex-col gap-1 mt-2">
