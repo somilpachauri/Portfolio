@@ -23,6 +23,9 @@ const Contact = dynamic(
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [loadContactChunk, setLoadContactChunk] = useState(false);
+  
+  // Controls whether the Nebula is visible or faded out
+  const [hideNebula, setHideNebula] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -31,18 +34,14 @@ export default function Home() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Phase 1: Silently fetch the 3D model files in the background
   useEffect(() => {
     const handleScroll = () => {
-      // Trigger the download as soon as they start scrolling
       if (window.scrollY > 50 && !loadContactChunk) {
         setLoadContactChunk(true);
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
-    // Fallback: If they don't scroll, fetch it after 3 seconds anyway
     const timer = setTimeout(() => setLoadContactChunk(true), 3000);
 
     return () => {
@@ -54,7 +53,8 @@ export default function Home() {
   return (
     <main className="relative w-full bg-black overflow-hidden scroll-smooth">
       
-      <div className="fixed inset-0 z-0">
+      {/* THE FIX: Opacity transition based on the hideNebula state */}
+      <div className={`fixed inset-0 z-0 transition-opacity duration-700 ease-in-out ${hideNebula ? "opacity-0" : "opacity-100"}`}>
         <Canvas 
           camera={{ position: [0, 0, 10], fov: 60 }}
           dpr={isMobile ? 1 : [1, 2]} 
@@ -81,7 +81,8 @@ export default function Home() {
         <Skills />
         <Projects />
         <div className="relative w-full">
-          {loadContactChunk && <Contact />}
+          {/* THE FIX: Pass the visibility setter to the Contact component */}
+          {loadContactChunk && <Contact onVisibilityChange={setHideNebula} />}
         </div>
       </div>
 

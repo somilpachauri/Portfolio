@@ -5,12 +5,12 @@ import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import CampingModel from "../3d/CampingModel";
 
-export default function Contact() {
+// Accept the visibility prop from page.tsx
+export default function Contact({ onVisibilityChange }: { onVisibilityChange?: (isVisible: boolean) => void }) {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState("");
 
-  const [mountCanvas, setMountCanvas] = useState(false);
   const [inView, setInView] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -20,36 +20,26 @@ export default function Contact() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
-    // Observer 1: PROXIMITY MOUNTING
-    // Boot up the WebGL Canvas when the user gets within 1000px of the bottom.
-    // It will be fully rendered and ready before they actually see it.
-    const mountObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setMountCanvas(true);
-      },
-      { rootMargin: "1000px" } 
-    );
-
-    // Observer 2: CAMERA ANIMATION
-    // Tell the CampingModel to move the camera when they actually enter the section.
     const viewObserver = new IntersectionObserver(
       ([entry]) => {
         setInView(entry.isIntersecting);
+        // THE FIX: Tell page.tsx to fade out the Nebula when this section enters the screen
+        if (onVisibilityChange) {
+          onVisibilityChange(entry.isIntersecting);
+        }
       },
       { threshold: 0.1 } 
     );
 
     if (sectionRef.current) {
-      mountObserver.observe(sectionRef.current);
       viewObserver.observe(sectionRef.current);
     }
 
     return () => {
-      mountObserver.disconnect();
       viewObserver.disconnect();
       window.removeEventListener("resize", checkMobile);
     };
-  }, []);
+  }, [onVisibilityChange]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,29 +79,29 @@ export default function Contact() {
     <section 
       id="contact" 
       ref={sectionRef} 
-      // FIX: Ensure bg-transparent so the section background doesn't hide the z-[-10] Canvas!
+      // Your original styling intact
       className="relative min-h-screen flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0 pointer-events-auto overflow-hidden bg-transparent"
     >
       <div 
         className="absolute inset-0 z-[-10] pointer-events-none"
+        // Your original CSS mask aesthetic intact
         style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)" }}
       >
-        {mountCanvas && (
-          <Canvas 
-            camera={{ position: [0, 2, 12], fov: 45 }}
-            dpr={isMobile ? 1 : [1, 2]} 
-            gl={{ antialias: false, powerPreference: "low-power" }} 
-          >
-            <ambientLight intensity={0.3} />
-            <directionalLight position={[5, 5, 5]} intensity={1.5} color="#fca311" />
-            
-            {!isMobile && <Environment preset="night" />}
-            
-            <Suspense fallback={null}>
-              <CampingModel inView={inView} />
-            </Suspense>
-          </Canvas>
-        )}
+        {/* THE FIX: Canvas mounts unconditionally so it never fails to show up */}
+        <Canvas 
+          camera={{ position: [0, 2, 12], fov: 45 }}
+          dpr={isMobile ? 0.8 : [1, 2]} 
+          gl={{ antialias: false, powerPreference: "low-power" }} 
+        >
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[5, 5, 5]} intensity={1.5} color="#fca311" />
+          
+          {!isMobile && <Environment preset="night" />}
+          
+          <Suspense fallback={null}>
+            <CampingModel inView={inView} />
+          </Suspense>
+        </Canvas>
       </div>
 
       <div className="relative z-10 w-full max-w-6xl mx-auto flex justify-center md:justify-start">
