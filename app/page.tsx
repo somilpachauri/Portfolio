@@ -23,8 +23,6 @@ const Contact = dynamic(
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [loadContactChunk, setLoadContactChunk] = useState(false);
-  
-  // Controls whether the Nebula is visible or faded out
   const [hideNebula, setHideNebula] = useState(false);
 
   useEffect(() => {
@@ -56,6 +54,7 @@ export default function Home() {
         <Canvas 
           camera={{ position: [0, 0, 10], fov: 60 }}
           dpr={isMobile ? 1 : [1, 2]} 
+          // High-performance is fine here because desktop uses it, and mobile is capped by dpr
           gl={{ antialias: false, powerPreference: "high-performance", alpha: false }} 
         >
           <color attach="background" args={["#000000"]} />
@@ -64,7 +63,10 @@ export default function Home() {
           
           <Suspense fallback={null}>
             <NebulaBackground isMobile={isMobile} />
-            <AdaptiveDpr pixelated />
+            
+            {/* THE FIX: Only throttle resolution down dynamically if the user is on a phone */}
+            {isMobile && <AdaptiveDpr pixelated />}
+            
             <AdaptiveEvents />
           </Suspense>
 

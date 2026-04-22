@@ -84,9 +84,9 @@ export default function Contact({ onVisibilityChange }: { onVisibilityChange?: (
         style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)" }}
       >
         <Canvas 
-          camera={{ position: [0, 2, 12], fov: 45 }}
-          dpr={isMobile ? 1.5 : [1, 2]} 
-          gl={{ antialias: false, powerPreference: "low-power" }} 
+        camera={{ position: [0, 2, 12], fov: 45 }}
+        dpr={isMobile ? 1.5 : [1, 2]} 
+        gl={{ antialias: false, powerPreference: isMobile ? "low-power" : "high-performance" }} 
         >
           <ambientLight intensity={0.3} />
           <directionalLight position={[5, 5, 5]} intensity={1.5} color="#fca311" />
