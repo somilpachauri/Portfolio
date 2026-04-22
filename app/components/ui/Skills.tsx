@@ -38,10 +38,8 @@ export default function Skills() {
         </p>
       </div>
 
-      {/* FIX 1: Removed mask-fade from the parent container to stop it from killing mobile performance */}
       <div className="relative w-full flex overflow-hidden pause-on-hover group mb-4 md:mb-6">
         
-        {/* FIX 2: Added 'will-change-transform' to force Hardware Acceleration on the animation */}
         <div className="flex w-max animate-scroll gap-3 md:gap-6 px-3 will-change-transform">
           {duplicatedTopRow.map((skill, index) => (
             <div 
@@ -51,10 +49,8 @@ export default function Skills() {
               <img 
                 src={skill.icon} 
                 alt={skill.name} 
-                // FIX 3: Changed drop-shadow to md:drop-shadow so phones don't calculate icon shadows
                 className={`w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-4 md:drop-shadow-xl ${skill.invert ? 'invert opacity-90' : ''}`} 
               />
-              {/* FIX 4: Changed drop-shadow to md:drop-shadow on the text */}
               <span className="text-white text-[11px] md:text-base font-bold tracking-wider md:drop-shadow-md">{skill.name}</span>
             </div>
           ))}

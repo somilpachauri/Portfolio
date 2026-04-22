@@ -5,7 +5,6 @@ import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import CampingModel from "../3d/CampingModel";
 
-// Accept the visibility prop from page.tsx
 export default function Contact({ onVisibilityChange }: { onVisibilityChange?: (isVisible: boolean) => void }) {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -23,7 +22,6 @@ export default function Contact({ onVisibilityChange }: { onVisibilityChange?: (
     const viewObserver = new IntersectionObserver(
       ([entry]) => {
         setInView(entry.isIntersecting);
-        // THE FIX: Tell page.tsx to fade out the Nebula when this section enters the screen
         if (onVisibilityChange) {
           onVisibilityChange(entry.isIntersecting);
         }
@@ -79,15 +77,12 @@ export default function Contact({ onVisibilityChange }: { onVisibilityChange?: (
     <section 
       id="contact" 
       ref={sectionRef} 
-      // Your original styling intact
       className="relative min-h-screen flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0 pointer-events-auto overflow-hidden bg-transparent"
     >
       <div 
         className="absolute inset-0 z-[-10] pointer-events-none"
-        // Your original CSS mask aesthetic intact
         style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 20%, black 100%)" }}
       >
-        {/* THE FIX: Canvas mounts unconditionally so it never fails to show up */}
         <Canvas 
           camera={{ position: [0, 2, 12], fov: 45 }}
           dpr={isMobile ? 1.5 : [1, 2]} 

@@ -20,10 +20,10 @@ export default function Navbar() {
           }
         });
       },
-      { threshold: 0.5 } 
+      { rootMargin: "-40% 0px -40% 0px" } 
     );
 
-    document.querySelectorAll("section").forEach((section) => {
+    document.querySelectorAll("section[id]").forEach((section) => {
       observer.observe(section);
     });
 
@@ -38,8 +38,7 @@ export default function Navbar() {
   ];
 
   return (
- <nav className="fixed top-0 left-0 w-full z-[999] bg-black/80 backdrop-blur-md border-b border-white/10 pointer-events-auto transition-all">
-      
+    <nav className="fixed top-0 left-0 w-full z-[999] bg-black/80 backdrop-blur-md border-b border-white/10 pointer-events-auto transition-all">
       <div className="px-6 md:px-24 py-5 flex justify-between items-center w-full">
         <Link 
           href="#about" 
@@ -94,7 +93,6 @@ export default function Navbar() {
           </Link>
         ))}
       </div>
-
     </nav>
   );
 }
