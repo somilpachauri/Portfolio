@@ -1,33 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("about");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const activeSectionRef = useRef("about");
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const currentId = entry.target.getAttribute("id");
-            if (currentId) {
-              setActiveSection(currentId);
-              window.history.replaceState(null, "", `#${currentId}`);
-            }
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -40% 0px" } 
-    );
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section[id]");
+      let currentId = "about";
 
-    document.querySelectorAll("section[id]").forEach((section) => {
-      observer.observe(section);
-    });
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+          currentId = section.getAttribute("id") || currentId;
+        }
+      });
 
-    return () => observer.disconnect();
+      if (activeSectionRef.current !== currentId) {
+        activeSectionRef.current = currentId;
+        setActiveSection(currentId);
+        window.history.replaceState(null, "", `#${currentId}`);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
@@ -36,6 +39,18 @@ export default function Navbar() {
     { name: "Projects", href: "projects" },
     { name: "Contact", href: "contact" },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    setIsMobileMenuOpen(false);
+    
+    if (href === "contact" && !document.getElementById("contact")) {
+      e.preventDefault();
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      window.history.replaceState(null, "", "#contact");
+      setActiveSection("contact");
+      activeSectionRef.current = "contact";
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-[999] bg-black/80 backdrop-blur-md border-b border-white/10 pointer-events-auto transition-all">
@@ -53,6 +68,7 @@ export default function Navbar() {
             <li key={link.name}>
               <Link 
                 href={`#${link.href}`} 
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`transition-colors duration-300 ${
                   activeSection === link.href ? "text-gold font-bold" : "text-platinum hover:text-gold"
                 }`}
@@ -84,7 +100,7 @@ export default function Navbar() {
           <Link 
             key={link.name}
             href={`#${link.href}`} 
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={(e) => handleNavClick(e, link.href)}
             className={`text-lg uppercase tracking-widest transition-colors duration-300 ${
               activeSection === link.href ? "text-gold font-bold drop-shadow-[0_0_8px_rgba(252,163,17,0.8)]" : "text-platinum hover:text-white"
             }`}
